@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ──────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Sticky navbar is 76px; keep anchor targets clear of it. */
+    scroll-padding-top: 6rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-white font-sans text-navy-700 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-navy-900;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    @apply bg-navy-900 text-white;
+  }
+
+  :focus-visible {
+    outline: 2px solid #1f3a61;
+    outline-offset: 3px;
+  }
+
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    .animate-marquee {
+      animation: none;
+    }
+  }
+}
+
+/* ── Components ────────────────────────────────────────────────────────── */
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8 lg:px-10;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-bronze-600;
+  }
+
+  .h1 {
+    @apply text-[clamp(2.25rem,5.5vw,4.25rem)] font-bold leading-[1.05] tracking-[-0.02em];
+  }
+
+  .h2 {
+    @apply text-[clamp(1.75rem,3.6vw,2.875rem)] font-bold leading-[1.12] tracking-[-0.018em];
+  }
+
+  .h3 {
+    @apply text-xl font-semibold leading-snug sm:text-2xl;
+  }
+
+  .lead {
+    @apply text-base leading-relaxed text-navy-500 sm:text-lg;
+  }
+
+  .prose-brand {
+    @apply text-base leading-relaxed text-navy-500;
+  }
+
+  .card-surface {
+    @apply rounded-2xl border border-navy-100 bg-white shadow-card transition-all duration-300 ease-smooth;
+  }
+
+  .card-interactive {
+    @apply hover:-translate-y-1 hover:border-bronze-300 hover:shadow-lift;
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-full border border-navy-100 bg-white/80 px-3 py-1 text-xs font-medium text-navy-600;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-navy-200 bg-white px-4 py-3 text-sm text-navy-800 placeholder:text-navy-300 transition-colors duration-200 focus:border-navy-600 focus:outline-none focus:ring-2 focus:ring-navy-600/15;
+  }
+
+  .field-error {
+    @apply border-red-500 ring-2 ring-red-500/15;
+  }
+
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-navy-900 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white;
+  }
+}
+
+/* ── Utilities ─────────────────────────────────────────────────────────── */
+@layer utilities {
+  .bg-hero-wash {
+    background:
+      radial-gradient(70% 60% at 75% 10%, rgba(207, 164, 81, 0.16) 0%, transparent 60%),
+      radial-gradient(60% 55% at 10% 20%, rgba(31, 58, 97, 0.1) 0%, transparent 62%),
+      linear-gradient(180deg, #ffffff 0%, #fafaf9 100%);
+  }
+
+  .bg-navy-mesh {
+    background:
+      radial-gradient(55% 60% at 80% 0%, rgba(207, 164, 81, 0.22) 0%, transparent 60%),
+      radial-gradient(50% 50% at 0% 100%, rgba(51, 80, 122, 0.45) 0%, transparent 65%),
+      linear-gradient(160deg, #0a1626 0%, #0e1f36 55%, #152b4a 100%);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
