@@ -1,11 +1,16 @@
 # Builds a static export of the site and publishes it to GitHub Pages.
 # Live URL: https://muzzamilqureshidev.github.io/connecticutrealestate/
 #
+# WHY THE gh-pages BRANCH RATHER THAN THE OFFICIAL PAGES PIPELINE:
+# `actions/configure-pages` with `enablement: true` has to create the Pages
+# site when one does not exist yet, and the workflow token is not permitted to
+# do that on this repo — the step failed and skipped the whole build. Pushing a
+# gh-pages branch enables Pages automatically and needs no repo settings
+# change, so that is the route used here.
+#
 # Pages serves static files only, so the build runs with NEXT_EXPORT=1
 # (output: 'export') and NEXT_BASE_PATH so every asset resolves under the
-# /connecticutrealestate/ sub-path. `configure-pages` switches the Pages source
-# to "GitHub Actions" — serving from a branch would publish the repo source
-# instead of the build.
+# /connecticutrealestate/ sub-path.
 name: Deploy to GitHub Pages
 
 on:
@@ -14,24 +19,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/configure-pages@v5
-        with:
-          # Turns Pages on and points it at this workflow.
-          enablement: true
 
       - uses: actions/setup-node@v4
         with:
@@ -45,21 +43,12 @@ jobs:
           NEXT_EXPORT: '1'
           NEXT_BASE_PATH: /connecticutrealestate
 
-      # Next emits assets under _next/. Jekyll ignores underscore-prefixed
-      # directories, so this guards against the site loading unstyled if the
-      # artifact is ever served through the legacy Jekyll path.
+      # Next emits assets under _next/. Jekyll skips underscore-prefixed
+      # directories, so without this the site would load completely unstyled.
       - run: touch out/.nojekyll
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: peaceiris/actions-gh-pages@v4
         with:
-          path: ./out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          publish_branch: gh-pages
